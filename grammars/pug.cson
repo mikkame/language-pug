@@ -5,6 +5,9 @@ fileTypes: [
 name: "Pug"
 patterns: [
   {
+    include: "#smarty"
+  }
+  {
     include: "#unbuffered_comments"
   }
   {
@@ -230,6 +233,9 @@ patterns: [
         name: "text.block.pug"
         patterns: [
           {
+            include: "#smarty"
+          }
+          {
             include: "#inline_pug"
           }
           {
@@ -253,6 +259,9 @@ patterns: [
     comment: "All constructs that generally span a single line starting with any number of white-spaces."
     end: "$"
     patterns: [
+      {
+        include: "#smarty"
+      }
       {
         include: "#unbuffered_comments"
       }
@@ -287,6 +296,9 @@ patterns: [
         name: "text.block.pipe.pug"
         patterns: [
           {
+            include: "#smarty"
+          }
+          {
             include: "#inline_pug"
           }
           {
@@ -316,6 +328,9 @@ patterns: [
             end: ">|$"
             patterns: [
               {
+                include: "#smarty"
+              }
+              {
                 include: "#inline_pug"
               }
               {
@@ -325,6 +340,9 @@ patterns: [
                 include: "#interpolated_error"
               }
             ]
+          }
+          {
+            include: "#smarty"
           }
           {
             include: "#inline_pug"
@@ -583,6 +601,9 @@ repository:
         name: "tag.inline.pug"
         patterns: [
           {
+            include: "#smarty"
+          }
+          {
             include: "#tag_name"
           }
           {
@@ -628,6 +649,9 @@ repository:
         begin: "\\["
         end: "\\]"
         patterns: [
+          {
+            include: "#smarty"
+          }
           {
             include: "#inline_pug_text"
           }
@@ -818,6 +842,9 @@ repository:
         name: "attribute_value"
         patterns: [
           {
+            include: "#smarty"
+          }
+          {
             include: "#string"
           }
           {
@@ -907,6 +934,9 @@ repository:
     end: "$"
     patterns: [
       {
+        include: "#smarty"
+      }
+      {
         include: "#inline_pug"
       }
       {
@@ -936,6 +966,129 @@ repository:
       }
       {
         include: "source.js"
+      }
+    ]
+  smarty:
+    begin:"\\{\\{"
+    end:"\\}\\}"
+    name:"meta.embedded.block.smarty"
+    patterns: [
+      {
+        include: "#smarty_strings"
+      }
+      {
+        include: "#smarty_variables"
+      }
+      {
+        include: "#smarty_lang"
+      }
+    ]
+  smarty_strings:
+    patterns: [
+      {
+        begin: "'"
+        beginCaptures:
+          "0":
+            name: "punctuation.definition.string.begin.smarty"
+        end: "'"
+        endCaptures:
+          "0":
+            name: "punctuation.definition.string.end.smarty"
+        name: "string.quoted.single.smarty"
+        patterns: [
+          {
+            match: "\\\\."
+            name: "constant.character.escape.smarty"
+          }
+        ]
+      }
+      {
+        begin: "\""
+        beginCaptures:
+          "0":
+            name: "punctuation.definition.string.begin.smarty"
+        end: "\""
+        endCaptures:
+          "0":
+            name: "punctuation.definition.string.end.smarty"
+        name: "string.quoted.double.smarty"
+        patterns: [
+          {
+            match: "\\\\."
+            name: "constant.character.escape.smarty"
+          }
+        ]
+      }
+    ]
+  smarty_lang:
+    patterns: [
+      {
+        match: "(!==|!=|!|<=|>=|<|>|===|==|%|&&|\\|\\|)|\\b(and|or|eq|neq|ne|gte|gt|ge|lte|lt|le|not|mod)\\b"
+        name: "keyword.operator.smarty"
+      }
+      {
+        match: "\\b(TRUE|FALSE|true|false)\\b"
+        name: "constant.language.smarty"
+      }
+      {
+        match: "\\b(php|if|else|elseif|foreach|foreachelse|for|section|switch|case|break|default)\\b"
+        name: "keyword.control.smarty"
+      }
+      {
+        captures:
+          "0":
+            name: "variable.parameter.smarty"
+        match: "\\b([a-zA-Z]+)="
+        name: "variable.attribute.smarty"
+      }
+      {
+        match: "\\b(capture|config_load|counter|cycle|debug|eval|fetch|include_php|include|insert|literal|math|strip|rdelim|ldelim|assign|constant|block|html_[a-z_]*)\\b"
+        name: "entity.function.built-in.smarty"
+      }
+      {
+        match: "\\|(capitalize|cat|count_characters|count_paragraphs|count_sentences|count_words|date_format|default|escape|indent|lower|nl2br|regex_replace|replace|spacify|string_format|strip_tags|strip|truncate|upper|wordwrap)"
+        name: "entity.function.variable-modifier.smarty"
+      }
+    ]
+  smarty_variables:
+    patterns: [
+      {
+        captures:
+          "1":
+            name: "punctuation.definition.variable.smarty"
+        match: "\\b(\\$)Smarty\\."
+        name: "variable.other.global.smarty"
+      }
+      {
+        captures:
+          "1":
+            name: "punctuation.definition.variable.smarty"
+          "2":
+            name: "variable.other.smarty"
+        match: "(\\$)([a-zA-Z_][a-zA-Z0-9_]*)\\b"
+        name: "variable.other.smarty"
+      }
+      {
+        captures:
+          "1":
+            name: "keyword.operator.smarty"
+          "2":
+            name: "variable.other.property.smarty"
+        match: "(->)([a-zA-Z_][a-zA-Z0-9_]*)\\b"
+        name: "variable.other.smarty"
+      }
+      {
+        captures:
+          "1":
+            name: "keyword.operator.smarty"
+          "2":
+            name: "meta.function-call.object.smarty"
+          "3":
+            name: "punctuation.definition.variable.smarty"
+          "4":
+            name: "punctuation.definition.variable.smarty"
+        match: "(->)([a-zA-Z_][a-zA-Z0-9_]*)(\\().*?(\\))"
+        name: "variable.other.smarty"
       }
     ]
 scopeName: "source.pug"
